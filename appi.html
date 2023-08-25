@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solicitud de Ubicación con Notificación</title>
+</head>
+<body>
+  <h1>Solicitud de Ubicación</h1>
+  <p>Al hacer clic en "Aceptar", nos das permiso para acceder a tu ubicación.</p>
+  <button id="getLocation">Aceptar</button>
+  
+  <div id="map" style="width: 100%; height: 400px;"></div>
+  
+  <script>
+    const getLocationButton = document.getElementById('getLocation');
+    const mapDiv = document.getElementById('map');
+    
+    getLocationButton.addEventListener('click', () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            const map = new google.maps.Map(mapDiv, {
+              center: { lat: latitude, lng: longitude },
+              zoom: 15
+            });
+            
+            const marker = new google.maps.Marker({
+              position: { lat: latitude, lng: longitude },
+              map: map,
+              title: 'Ubicación actual'
+            });
+            
+            // Simular envío de ubicación al servidor
+            sendLocationToServer(latitude, longitude);
+          },
+          (error) => {
+            console.log(`Error al obtener la ubicación: ${error.message}`);
+          }
+        );
+      } else {
+        console.log('Geolocalización no está disponible en este navegador.');
+      }
+    });
+    
+    function sendLocationToServer(latitude, longitude) {
+      // Simular envío al servidor (esto es solo un ejemplo)
+      const notification = `Ubicación recibida: Latitud ${latitude}, Longitud ${longitude}`;
+      alert(notification);  // Simular notificación al administrador
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_CLAVE_DE_API&callback=initMap"></script>
+</body>
+</html>
+
